@@ -18,9 +18,9 @@ DeviceSettings settings; // Create an instance of DeviceSettings
 bool lastLbuttonState = HIGH; // Assuming active low buttons
 bool lastRbuttonState = HIGH;
 
-const int LbuttonPin = 2; // The pin the button is connected to
-const int RbuttonPin = 11; // The pin the button is connected to
-const int CbuttonPin = 10; // The pin the button is connected to
+const int LbuttonPin = 13; // The pin the button is connected to
+const int RbuttonPin = 12; // The pin the button is connected to
+const int CbuttonPin = 11; // The pin the button is connected to
 volatile int loopState = 0;
 volatile int buttonPressed = 0; // Flag to indicate button press
 const long debounceDelay = 150; // Debounce delay in milliseconds
@@ -28,10 +28,11 @@ unsigned long lastDebounceTime = 0; // Last debounce check time
 unsigned long motorStartTime = 0; 
 enum MotorState {STOPPED, CLOCKWISE, COUNTERCLOCKWISE} motorState = STOPPED;
 enum MotorState lastMotorState = STOPPED; // Add this to track the last non-stopped state
-const int heaterPinCW = 43; // Heater control pin
-const int heaterPinCCW = 44; // Heater control pin
-const int fanPin = 17; // Heater control pin
-const int coilPin = 21; // Heater control pin
+const int heaterPinCW = 16; // Heater control pin
+const int heaterPinCCW = 21; // Heater control pin
+const int fanPin = 2; // Heater control pin
+const int coilPin = 3; // Heater control pin
+const int dumpPin = 1; // Heater control pin
 const double thresholdCW = 0.8; // Threshold for CW close to 1
 const double thresholdCCW = 0.2; // Threshold for CCW close to 0
 
@@ -44,7 +45,7 @@ double Kp = 2.0, Ki = 5.0, Kd = 1.0;
 PID myPID(&Input, &Output, &settings.heSetpoint, Kp, Ki, Kd, DIRECT);
 
 TFT_eSPI tft = TFT_eSPI();
-const int oneWireBus = 16;
+const int oneWireBus = 17;
 OneWire oneWire(oneWireBus);
 DallasTemperature sensors(&oneWire);
 
@@ -57,18 +58,20 @@ void IRAM_ATTR handleButtonPress() {
 // Addresses of 2 DS18B20s
 //uint8_t sensor1[8] = { 0x28, 0xCA, 0x64, 0x43, 0xD4, 0xE1, 0x3C, 0x03 };
 //uint8_t sensor2[8] = { 0x28, 0x75, 0x32, 0x43, 0xD4, 0xE1, 0x3C, 0x29 };
-uint8_t sensor1[8] = { 0x28, 0xB9, 0x98, 0x43, 0xD4, 0xE1, 0x3C, 0x45 };
-uint8_t sensor2[8] = { 0x28, 0xF5, 0x75, 0x43, 0xD4, 0xE1, 0x3C, 0x7B };
+uint8_t sensor1[8] = { 0x28, 0xA2, 0x0F, 0xB3, 0x10, 0x24, 0x08, 0x28 };
+uint8_t sensor2[8] = { 0x28, 0x32, 0x1F, 0xBF, 0x10, 0x24, 0x07, 0xB6 };
 
 void setup() {
   Serial.begin(115200);
   sensors.begin();
+    pinMode(PIN_LCD_BL, OUTPUT);
   pinMode(PIN_POWER_ON, OUTPUT);
   pinMode(fanPin, OUTPUT);
   pinMode(coilPin, OUTPUT);
   pinMode(heaterPinCW, OUTPUT);
 pinMode(heaterPinCCW, OUTPUT);
   digitalWrite(PIN_POWER_ON, HIGH);
+  digitalWrite(PIN_LCD_BL, HIGH);
   digitalWrite(fanPin, LOW);
   digitalWrite(coilPin, LOW);
   digitalWrite(heaterPinCW,LOW);
@@ -119,10 +122,10 @@ void loop() {
 
   if (Input2 >= settings.fanSetpoint) {
 //    Serial.println("fan on");
-    digitalWrite(1, HIGH);
+    digitalWrite(fanPin, HIGH);
   } else {
 //    Serial.println("fan off");
-    digitalWrite(1, LOW);
+    digitalWrite(fanPin, LOW);
   }
 
   if (Input2 >= settings.coilSetpoint) {
@@ -255,7 +258,7 @@ void loopAlternate2() {
     // Display code
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("Motor Runtime", 0, 0, 4);
+    tft.drawString("Diverter Valve Runtime", 0, 0, 4);
     tft.drawString(String(settings.heMotorTime, 0), 0, 40, 8); // Show current heSetpoint settings);
 }
 
