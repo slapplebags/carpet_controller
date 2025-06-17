@@ -130,10 +130,10 @@ void loop() {
 
   if (Input2 >= settings.coilSetpoint) {
 //    Serial.println("engine off");
-    digitalWrite(coilPin, LOW);
+    digitalWrite(coilPin, HIGH);
   } else if (Input2 < settings.coilSetpoint) {
 //    Serial.println("engine on");
-    digitalWrite(coilPin, HIGH);
+    digitalWrite(coilPin, LOW);
   }
 
 
@@ -189,24 +189,24 @@ void loopOriginal() {
   int temperatureFInt = (int)Input; // Convert float to int for display
   itoa(temperatureFInt, temperatureFString, 10); // Convert int to string
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.drawString("HexTmp:", 0, 0, 4);
+  tft.drawString("HexTmp:", 0, 30, 4);
   if (settings.heSetpoint < sensors.getTempF(sensor1)) { 
     tft.setTextColor(TFT_BLUE, TFT_BLACK);
   } else { 
     tft.setTextColor(TFT_RED, TFT_BLACK);
   }
-  tft.drawString(temperatureFString, 0, 40, 6);
+  tft.drawString(temperatureFString, 0, 60, 6);
   char temperatureFString2[10];
   int temperatureFInt2 = (int)Input2; // Convert float to int for display
   itoa(temperatureFInt2, temperatureFString2, 10); // Convert int to string
   tft.setTextColor(TFT_GREEN, TFT_BLACK);
-  tft.drawString("EngTmp:", 0, 85, 4);
+  tft.drawString("EngTmp:", 0, 100, 4);
     if (settings.coilSetpoint > sensors.getTempF(sensor2)) { 
     tft.setTextColor(TFT_BLUE, TFT_BLACK);
   } else { 
     tft.setTextColor(TFT_RED, TFT_BLACK);
   }
-  tft.drawString(temperatureFString2, 0, 120, 6);
+  tft.drawString(temperatureFString2, 0, 130, 6);
 
 }
 
@@ -232,8 +232,8 @@ void loopAlternate1() {
     // Display code
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("HeX Set Temp", 0, 0, 4);
-    tft.drawString(String(settings.heSetpoint, 1), 0, 40, 8); // Show current heSetpoint settings);
+    tft.drawString("HeX Set Temp", 0, 50, 4);
+    tft.drawString(String(settings.heSetpoint, 1), 0, 90, 8); // Show current heSetpoint settings);
 }
 
 void loopAlternate2() {
@@ -258,8 +258,8 @@ void loopAlternate2() {
     // Display code
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("Diverter Valve Runtime", 0, 0, 4);
-    tft.drawString(String(settings.heMotorTime, 0), 0, 40, 8); // Show current heSetpoint settings);
+    tft.drawString("Diverter Valve Runtime", 0, 50, 4);
+    tft.drawString(String(settings.heMotorTime, 0), 0, 90, 8); // Show current heSetpoint settings);
 }
 
 void loopAlternate3() {
@@ -284,8 +284,8 @@ void loopAlternate3() {
     // Display code
     tft.fillScreen(TFT_BLACK);
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("Fan Set Temp", 0, 0, 4);
-    tft.drawString(String(settings.fanSetpoint, 1), 0, 40, 8); // Show current heSetpoint settings);
+    tft.drawString("Fan Set Temp", 0, 50, 4);
+    tft.drawString(String(settings.fanSetpoint, 1), 0, 90, 8); // Show current heSetpoint settings);
 }
 
 void loopAlternate4() {
@@ -309,8 +309,8 @@ void loopAlternate4() {
 
     // Display code
     tft.setTextColor(TFT_GREEN, TFT_BLACK);
-    tft.drawString("E-Stop Set Temp", 0, 0, 4);
-    tft.drawString(String(settings.coilSetpoint, 1), 0, 40, 8); // Show current heSetpoint settings);
+    tft.drawString("E-Stop Set Temp", 0, 50, 4);
+    tft.drawString(String(settings.coilSetpoint, 1), 0, 90, 8); // Show current heSetpoint settings);
 }
 
 void startMotorCW() {
