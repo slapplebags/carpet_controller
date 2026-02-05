@@ -79,7 +79,7 @@ void maybeClearScreen() {
 }
 
 // ---------- Dump control with hysteresis based on Hex temp ----------
-const double HEX_DUMP_HYST = 2.0;
+const double HEX_DUMP_HYST = 1.0;
 bool dumpIsHigh = false;
 inline void updateDumpFromHexTemp(double hexF, double setF) {
   if (!dumpIsHigh && hexF >= setF) {
@@ -97,13 +97,13 @@ void IRAM_ATTR handleButtonPress() {
 
 // ---------------- Motor helpers ----------------
 void startMotorCW() {
-  digitalWrite(heaterPinCW, HIGH);
-  digitalWrite(heaterPinCCW, LOW);
+  digitalWrite(heaterPinCW, LOW);
+  digitalWrite(heaterPinCCW, HIGH);
 }
 
 void startMotorCCW() {
-  digitalWrite(heaterPinCW, LOW);
-  digitalWrite(heaterPinCCW, HIGH);
+  digitalWrite(heaterPinCW, HIGH);
+  digitalWrite(heaterPinCCW, LOW);
 }
 
 void stopMotor() {
